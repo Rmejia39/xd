@@ -1,23 +1,21 @@
-const {
-    createApp
-} = Vue;
+//const { createApp } = Vue; //Es exclusivo de la v3 de Vue.js
 var db;
-createApp({
-    data(){
-        return {
-            forms:{
-                docente     : {mostrar:false},
-                alumno      : {mostrar:false},
-                materia     : {mostrar:false},
-                matricula   : {mostrar:false},
-                inscripcion : {mostrar:false},
-            }
+//createApp({
+var app = new Vue({
+    el: "#app",
+    data: {
+        forms:{
+            docente     : {mostrar:false},
+            alumno      : {mostrar:false},
+            materia     : {mostrar:false},
+            matricula   : {mostrar:false},
+            inscripcion : {mostrar:false},
         }
     },
     methods:{
         abrirFormulario(form){
-            this.forms[form].mostrar = true;
-            console.log( form,  this.forms[form]);
+            this.forms[form].mostrar = !this.forms[form].mostrar;
+            this.$refs[form].listar();
         },
         abrirBD(){
             let indexDB = indexedDB.open('db_sistema_academico',1);
@@ -42,4 +40,4 @@ createApp({
     created() {
         this.abrirBD();
     }
-}).mount('#app');
+});
