@@ -10,6 +10,7 @@ Vue.component('component-matriculas',{
                 idMatricula  : '',
                 fecha     : '',
                 pago      : false,
+                comprobante : '',
                 alumno    : {
                     id    : '',
                     label : ''
@@ -96,6 +97,17 @@ Vue.component('component-matriculas',{
                                 </div>
                             </div>
                             <div class="row p-1">
+                                <div class="col-3 col-md-2">
+                                    <img :src="matricula.comprobante" width="50" height="50">
+                                </div>
+                                <div class="col-9 col-md-10">
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                                        <input accept="image/*" onChange="seleccionarImagen(this)" type="file" class="form-control" id="inputGroupFile01">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-1">
                                 <div class="col-3 col-md-3">
                                     <input class="btn btn-primary" type="submit" 
                                         value="Guardar">
@@ -130,6 +142,7 @@ Vue.component('component-matriculas',{
                                 <tr v-for="matricula in matriculas" :key="matricula.idMatricula" @click="modificarMatricula(matricula)" >
                                     <td>{{ new Date(matricula.fecha +' 01:00:00').toLocaleDateString() }}</td>
                                     <td>{{ matricula.pago ? 'ACTUALIZADO' : 'PENDIENTE' }}</td>
+                                    <td><img :src="matricula.comprobante" width="50" height="50"></td>
                                     <td>{{ matricula.alumno.label }}</td>
                                     <td><button class="btn btn-danger" @click="eliminarMatricula(matricula)">ELIMINAR</button></td>
                                 </tr>
@@ -141,3 +154,16 @@ Vue.component('component-matriculas',{
         </div>
     `
 });
+
+async function seleccionarImagen(image){
+    let archivo = image.files[0];
+    if(archivo){
+        let blob = await img(archivo, 1),
+            reader = new FileReader();
+        reader.onload = e=>{
+            app.$refs.matricula.matricula.comprobante = e.target.result;
+            console.log( e.target.result ); 
+        };
+        reader.readAsDataURL(blob);
+    }
+}
